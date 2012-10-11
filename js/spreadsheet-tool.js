@@ -1,3 +1,6 @@
+// sqliteEndpoint = "../../sqlite";
+sqliteEndpoint = "https://box.scraperwiki.com/DragonDave/canada-temperature/sqlite";
+
 function sqlite(args){
     var options = {
         columns: "*",
@@ -8,8 +11,7 @@ function sqlite(args){
     }
     $.extend(true, options, args);
     return $.ajax({
-        // url: "../../sqlite",
-        url: 'https://box.scraperwiki.com/DragonDave/canada-temperature/sqlite',
+        url: sqliteEndpoint,
         dataType: 'json',
         cache: false,
         data: {
