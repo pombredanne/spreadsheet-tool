@@ -11,7 +11,7 @@ This library is intended to be cloned into the `http/` directory of a ScraperWik
     $ cd /my-data-project/http/
     $ git clone git://github.com/scraperwiki/spreadsheet-tool.git
 
-Make sure the `sqliteEndpoint` variable at the top of the `/js/spreadsheet-tool.js` file is pointing the database you want to access:
+Make sure the `sqliteEndpoint` variable at the top of the `js/spreadsheet-tool.js` file is pointing the database you want to access:
 
     // to access your box's database:
     sqliteEndpoint = "../../sqlite";
