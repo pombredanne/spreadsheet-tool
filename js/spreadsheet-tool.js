@@ -121,7 +121,7 @@ $(function(){
 
     sqlite().done(function(tables){
         if(tables.length == 0){
-            alert('no tables found');
+            $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Your dataset is empty!</strong> We connected to your dataset fine, but couldn&rsquo;t find any data. Is it empty?').appendTo('body');
         } else {
             var key = [location.pathname, 'tab'];
             var storedTableName = store.get(JSON.stringify(key));
@@ -143,7 +143,12 @@ $(function(){
             showSlickGrid(name);
         }
     }).fail(function(jqXHR, textStatus, errorThrown){
-        $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Something went wrong!</strong> We couldn&rsquo;t select data from your project&rsquo;s SQLite API.').appendTo('body');
+        if(jqXHR.status == 403){
+            var html = '<strong>Forbidden access to your dataset API</strong> We received a 403 Forbidden status while reading your dataset. Does your box have a publish_token we don&rsquo;t know about?'
+        } else {
+            var html = '<strong>Unexpected response from dataset API</strong> ' + $.trim(jqXHR.responseText)
+        }
+        $('<div>').addClass('alert alert-error').html('<button type="button" class="close" data-dismiss="alert">×</button> ' + html).appendTo('body');
     });
 
 });
