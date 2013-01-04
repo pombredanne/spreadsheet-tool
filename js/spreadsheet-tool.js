@@ -1,5 +1,5 @@
 // sqliteEndpoint = "../../sqlite";
-sqliteEndpoint = "https://box.scraperwiki.com/DragonDave/canada-temperature/sqlite";
+sqliteEndpoint = "https://box.scraperwiki.com/DragonDave.canada-temperature/sqlite";
 
 function sqlite(args){
     var options = {
