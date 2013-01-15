@@ -19,6 +19,18 @@ function sqlite(args){
     });
 }
 
+function showAlert(title, message, level){
+    // [title] and [message] should be html strings. The first is displayed in bold.
+    // If [level] is a truthful value, the alert is printed in red.
+    level = level || 0;
+    var $div = $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button>');
+    $div.append('<strong>' + title +'</strong> ' + message)
+    if(level){
+        $div.addClass('alert-error');
+    }
+    $div.appendTo('body');
+}
+
 function showSlickGrid(table_name){
     sqlite({
         table: table_name
@@ -119,7 +131,7 @@ function showSlickGrid(table_name){
 function createSpreadsheet(){
     sqlite().done(function(tables){
         if(tables.length == 0){
-            $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Your dataset is empty!</strong> We connected to your dataset fine, but couldn&rsquo;t find any data. Is it empty?').appendTo('body');
+            showAlert('Your dataset is empty!', 'We connected to your dataset fine, but couldn&rsquo;t find any data. Is it empty?');
         } else {
             var key = [location.pathname, 'tab'];
             var storedTableName = store.get(JSON.stringify(key));
@@ -142,31 +154,30 @@ function createSpreadsheet(){
         }
     }).fail(function(jqXHR, textStatus, errorThrown){
         if(jqXHR.status == 403){
-            var html = '<strong>Forbidden access to your dataset API</strong> We received a 403 Forbidden status while reading your dataset. Does your box have a publish_token we don&rsquo;t know about?'
+            showAlert('Forbidden access to your dataset API', 'We received a 403 Forbidden status while reading your dataset. Does your box have a publish_token we don&rsquo;t know about?', true);
         } else {
-            var html = '<strong>Unexpected response from dataset API</strong> ' + $.trim(jqXHR.responseText)
+            showAlert('Unexpected response from dataset API', $.trim(jqXHR.responseText), true);
         }
-        $('<div>').addClass('alert alert-error').html('<button type="button" class="close" data-dismiss="alert">×</button> ' + html).appendTo('body');
     });
 }
 
 $(function(){
     if(window.location.hash == ''){
-        $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Which dataset do you want to visualise?</strong> You didn&rsquo;t supply a JSON object of settings in the URL hash. Are you sure you followed the right link?').appendTo('body');
+        showAlert('Which dataset do you want to visualise?', 'You didn&rsquo;t supply a JSON object of settings in the URL hash. Are you sure you followed the right link?');
         return false;
     }
     hash = window.location.hash.substr(1);
     try {
         settings = JSON.parse(decodeURIComponent(hash));
     } catch(e) {
-        $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Could not read settings from URL hash!</strong> The settings supplied in your URL hash are not a valid JSON object. Are you sure you followed the right link?').appendTo('body');
+        showAlert('Could not read settings from URL hash!', 'The settings supplied in your URL hash are not a valid JSON object. Are you sure you followed the right link?');
         return false
     }
     if('dataset_box_url' in settings){
         window.sqliteEndpoint = settings.dataset_box_url + '/sqlite'
         createSpreadsheet()
     } else {
-        $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Which dataset do you want to visualise?</strong> You supplied a JSON object in the URL hash, but it doesn&rsquo;t contain a &ldquo;dataset_box_url&rdquo; key-value pair. Are you sure you followed the right link?').appendTo('body');
+        showAlert('Which dataset do you want to visualise?', 'You supplied a JSON object in the URL hash, but it doesn&rsquo;t contain a &ldquo;dataset_box_url&rdquo; key-value pair. Are you sure you followed the right link?');
     }
 
 });
