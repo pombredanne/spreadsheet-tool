@@ -1,4 +1,5 @@
 #!/bin/sh
 
 # Hack
+cd $(dirname $0)
 mv js css img index.html ~/http
