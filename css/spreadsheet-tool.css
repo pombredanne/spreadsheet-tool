@@ -32,3 +32,11 @@ ul.nav-tabs {
 .nav-tabs > li > a {
     padding: 4px 8px;
 }
+
+body > .alert {
+    margin: 20px;
+}
+
+body > .alert strong {
+    display: block;
+}
