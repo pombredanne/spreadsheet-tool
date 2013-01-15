@@ -1,6 +1,3 @@
-// sqliteEndpoint = "../../sqlite";
-sqliteEndpoint = "https://box.scraperwiki.com/DragonDave.canada-temperature/sqlite";
-
 function sqlite(args){
     var options = {
         columns: "*",
@@ -118,6 +115,10 @@ function showSlickGrid(table_name){
 }
 
 $(function(){
+    // TODO: Check fragment is supplied & contains box_url
+    frag = window.location.hash.substr(1);
+    obj = JSON.parse(decodeURIComponent(frag));
+    sqliteEndpoint = obj.dataset_box_url + '/sqlite'
 
     sqlite().done(function(tables){
         if(tables.length == 0){
