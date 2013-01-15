@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Hack
+mv js css img index.html ~/http
