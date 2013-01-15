@@ -2,27 +2,19 @@
 
 This takes the best bit of Alumina and makes it… bigger!
 
-Install this into your box to see your database, full screen, as a spreadsheet.
+Install this into a box, or run it locally, to see your SQLite database, full screen, as a spreadsheet.
 
-## How to install ##
+## How to use ##
 
-This library is intended to be cloned into the `http/` directory of a ScraperWiki box. Like so:
+This tool expects to call the SQLite API endpoint of a ScraperWiki box. It thus needs the full URL (including publish_token if applicable) of the box containing your data, supplied as a URI-encoded JSON object in the location hash.
 
-    $ cd /my-data-project/http/
-    $ git clone git://github.com/scraperwiki/spreadsheet-tool.git
+The best way of explaining how to create such a hash is probably via some javascript code:
 
-Make sure the `sqliteEndpoint` variable at the top of the `js/spreadsheet-tool.js` file is pointing the database you want to access:
+    var base_url = "http://myserver.com/spreadsheet-tool";
+    var settings = {
+      "dataset_box_url": "http://box.scraperwiki.com/example-data/pUb1i5hT0k3n/"
+    }
+    var hash = encodeURIComponent(JSON.stringify(settings))
+    console.log('URL to visit: ' + base_url + '#' + hash);
 
-    // to access your box's database:
-    sqliteEndpoint = "../../sqlite";
-
-    // to access another box's database:
-    sqliteEndpoint = "https://box.scraperwiki.com/<owner>/<box>/sqlite";
-
-You can then visit the spreadsheet by visiting:
-
-    https://box.scraperwiki.com/my-name/my-data-project/http/spreadsheet-tool/
-
-Or, if your box has a `publish_token` set:
-
-    https://box.scraperwiki.com/my-name/my-data-project/<publish_token>/http/spreadsheet-tool/
+Try copying and pasting it into your browser's Javascript console, or a node.js console, to see what the URL (with hash!) should look like.
