@@ -1,3 +1,5 @@
+// Hint: Scroll down to the jQuery ready $(function(){...}) to see how everything starts off.
+
 function sqlite(args){
     var options = {
         columns: "*",
@@ -114,12 +116,7 @@ function showSlickGrid(table_name){
     });
 }
 
-$(function(){
-    // TODO: Check fragment is supplied & contains box_url
-    frag = window.location.hash.substr(1);
-    obj = JSON.parse(decodeURIComponent(frag));
-    sqliteEndpoint = obj.dataset_box_url + '/sqlite'
-
+function createSpreadsheet(){
     sqlite().done(function(tables){
         if(tables.length == 0){
             $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Your dataset is empty!</strong> We connected to your dataset fine, but couldn&rsquo;t find any data. Is it empty?').appendTo('body');
@@ -151,5 +148,25 @@ $(function(){
         }
         $('<div>').addClass('alert alert-error').html('<button type="button" class="close" data-dismiss="alert">×</button> ' + html).appendTo('body');
     });
+}
+
+$(function(){
+    if(window.location.hash == ''){
+        $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Which dataset do you want to visualise?</strong> You didn&rsquo;t supply a JSON object of settings in the URL hash. Are you sure you followed the right link?').appendTo('body');
+        return false;
+    }
+    hash = window.location.hash.substr(1);
+    try {
+        settings = JSON.parse(decodeURIComponent(hash));
+    } catch(e) {
+        $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Could not read settings from URL hash!</strong> The settings supplied in your URL hash are not a valid JSON object. Are you sure you followed the right link?').appendTo('body');
+        return false
+    }
+    if('dataset_box_url' in settings){
+        window.sqliteEndpoint = settings.dataset_box_url + '/sqlite'
+        createSpreadsheet()
+    } else {
+        $('<div>').addClass('alert').html('<button type="button" class="close" data-dismiss="alert">×</button> <strong>Which dataset do you want to visualise?</strong> You supplied a JSON object in the URL hash, but it doesn&rsquo;t contain a &ldquo;dataset_box_url&rdquo; key-value pair. Are you sure you followed the right link?').appendTo('body');
+    }
 
 });
