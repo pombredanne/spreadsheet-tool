@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # This setup script is run by ScraperWiki when the spreadsheet-tool is installed.
-# It moves all the neccessary files into the box's http directory.
 
-cd $(dirname $0)
-mv js css img index.html ~/http
+cd
+mkdir -p incoming
+rm -r http
+ln -s $(dirname $0)/http http

@@ -173,11 +173,11 @@ $(function(){
         showAlert('Could not read settings from URL hash!', 'The settings supplied in your URL hash are not a valid JSON object. Are you sure you followed the right link?');
         return false
     }
-    if('dataset_box_url' in settings){
-        window.sqliteEndpoint = settings.dataset_box_url + '/sqlite'
+    if('target' in settings && 'url' in settings.target){
+        window.sqliteEndpoint = settings.target.url + '/sqlite'
         createSpreadsheet()
     } else {
-        showAlert('Which dataset do you want to visualise?', 'You supplied a JSON object in the URL hash, but it doesn&rsquo;t contain a &ldquo;dataset_box_url&rdquo; key-value pair. Are you sure you followed the right link?');
+        showAlert('Which dataset do you want to visualise?', 'You supplied a JSON object in the URL hash, but it doesn&rsquo;t contain a &ldquo;settings.target&rdquo; key-value pair. Are you sure you followed the right link?');
     }
 
 });
