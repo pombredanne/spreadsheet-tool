@@ -33,7 +33,7 @@ function showAlert(title, message, level){
 
 function showSlickGrid(table_name){
     sqlite({
-        table: table_name
+        table: '[' + table_name + ']'
     }).done(function(data){
         var grid;
         var options = {
@@ -75,10 +75,10 @@ function showSlickGrid(table_name){
         // handle sorting of data
         grid.onSort.subscribe(function(e, args){
             grid.scrollRowIntoView(0);
-            ordercolumn = args.sortCol.field;
+            ordercolumn = '[' + args.sortCol.field + ']';
             orderdirection = args.sortAsc;
             sqlite({
-                table: table_name,
+                table: '[' + table_name + ']',
                 orderby: ordercolumn + ' ' + (orderdirection ? 'asc' : 'desc')
             }).done(function(newdata){
                 data = newdata;
@@ -96,12 +96,12 @@ function showSlickGrid(table_name){
             if(!loading && !allDataLoaded && grid.getViewport().bottom + 20 > grid.getDataLength()){
                 loading = true;
                 var sqlite_options = {
-                    table: table_name,
+                    table: '[' + table_name + ']',
                     limit: rowsToGet,
                     offset: grid.getDataLength()
                 }
                 if(ordercolumn && orderdirection){
-                    sqlite_options['orderby'] = ordercolumn + ' ' + (orderdirection ? 'asc' : 'desc');
+                    sqlite_options['orderby'] = ordercolumn + (orderdirection ? 'asc' : 'desc');
                 }
                 sqlite(sqlite_options).done(function(newdata){
                     $.each(newdata, function(i,row){
@@ -173,11 +173,11 @@ $(function(){
         showAlert('Could not read settings from URL hash!', 'The settings supplied in your URL hash are not a valid JSON object. Are you sure you followed the right link?');
         return false
     }
-    if('dataset_box_url' in settings){
-        window.sqliteEndpoint = settings.dataset_box_url + '/sqlite'
+    if('target' in settings && 'url' in settings.target){
+        window.sqliteEndpoint = settings.target.url + '/sqlite'
         createSpreadsheet()
     } else {
-        showAlert('Which dataset do you want to visualise?', 'You supplied a JSON object in the URL hash, but it doesn&rsquo;t contain a &ldquo;dataset_box_url&rdquo; key-value pair. Are you sure you followed the right link?');
+        showAlert('Which dataset do you want to visualise?', 'You supplied a JSON object in the URL hash, but it doesn&rsquo;t contain a &ldquo;settings.target&rdquo; key-value pair. Are you sure you followed the right link?');
     }
 
 });
