@@ -154,7 +154,7 @@ function createSpreadsheet(){
         }
     }).fail(function(jqXHR, textStatus, errorThrown){
         if(jqXHR.status == 403){
-            showAlert('Forbidden access to your dataset API', 'We received a 403 Forbidden status while reading your dataset. Does your box have a publish_token we don&rsquo;t know about?', true);
+            showAlert('Forbidden access to your dataset API', 'We received a 403 Forbidden status while reading your dataset. Does your box have a publishToken we don&rsquo;t know about?', true);
         } else {
             showAlert('Unexpected response from dataset API', $.trim(jqXHR.responseText), true);
         }
